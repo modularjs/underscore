@@ -8,19 +8,16 @@ define([
 ], function (isFunction, has, toString) {
     "use strict";
 
-    // Internal recursive comparison function.
-    function eq(a, b, stack) {
+    // Internal recursive comparison function for `isEqual`.
+    var eq = function(a, b, aStack, bStack) {
         // Identical objects are equal. `0 === -0`, but they aren't identical.
-        // See the Harmony `egal` proposal: http://wiki.ecmascript.org/doku.php?id=harmony:egal.
+        // See the [Harmony `egal` proposal](http://wiki.ecmascript.org/doku.php?id=harmony:egal).
         if (a === b) return a !== 0 || 1 / a == 1 / b;
         // A strict comparison is necessary because `null == undefined`.
         if (a == null || b == null) return a === b;
         // Unwrap any wrapped objects.
-        if (a._chain) a = a._wrapped;
-        if (b._chain) b = b._wrapped;
-        // Invoke a custom `isEqual` method if one is provided.
-        if (a.isEqual && isFunction(a.isEqual)) return a.isEqual(b);
-        if (b.isEqual && isFunction(b.isEqual)) return b.isEqual(a);
+        if (a._wrapped) a = a._wrapped;
+        if (b._wrapped) b = b._wrapped;
         // Compare `[[Class]]` names.
         var className = toString.call(a);
         if (className != toString.call(b)) return false;
@@ -50,14 +47,23 @@ define([
         if (typeof a != 'object' || typeof b != 'object') return false;
         // Assume equality for cyclic structures. The algorithm for detecting cyclic
         // structures is adapted from ES 5.1 section 15.12.3, abstract operation `JO`.
-        var length = stack.length;
+        var length = aStack.length;
         while (length--) {
             // Linear search. Performance is inversely proportional to the number of
             // unique nested structures.
-            if (stack[length] == a) return true;
+            if (aStack[length] == a) return bStack[length] == b;
+        }
+        // Objects with different constructors are not equivalent, but `Object`s
+        // from different frames are.
+        var aCtor = a.constructor, bCtor = b.constructor;
+        if (aCtor !== bCtor && !(isFunction(aCtor) && (aCtor instanceof aCtor) &&
+            isFunction(bCtor) && (bCtor instanceof bCtor))
+            && ('constructor' in a && 'constructor' in b)) {
+            return false;
         }
         // Add the first object to the stack of traversed objects.
-        stack.push(a);
+        aStack.push(a);
+        bStack.push(b);
         var size = 0, result = true;
         // Recursively compare objects and arrays.
         if (className == '[object Array]') {
@@ -67,20 +73,17 @@ define([
             if (result) {
                 // Deep compare the contents, ignoring non-numeric properties.
                 while (size--) {
-                    // Ensure commutative equality for sparse arrays.
-                    if (!(result = size in a == size in b && eq(a[size], b[size], stack))) break;
+                    if (!(result = eq(a[size], b[size], aStack, bStack))) break;
                 }
             }
         } else {
-            // Objects with different constructors are not equivalent.
-            if ('constructor' in a != 'constructor' in b || a.constructor != b.constructor) return false;
             // Deep compare objects.
             for (var key in a) {
                 if (has(a, key)) {
                     // Count the expected number of properties.
                     size++;
                     // Deep compare each member.
-                    if (!(result = has(b, key) && eq(a[key], b[key], stack))) break;
+                    if (!(result = has(b, key) && eq(a[key], b[key], aStack, bStack))) break;
                 }
             }
             // Ensure that both objects contain the same number of properties.
@@ -92,11 +95,12 @@ define([
             }
         }
         // Remove the first object from the stack of traversed objects.
-        stack.pop();
+        aStack.pop();
+        bStack.pop();
         return result;
-    }
+    };
 
     return function (a, b) {
-        return eq(a, b, []);
+        return eq(a, b, [], []);
     };
 });
