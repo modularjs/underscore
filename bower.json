@@ -1,6 +1,22 @@
 {
-  "name": "underscore",
-  "version": "1.5.2",
-  "main": "underscore.js",
-  "ignore" : ["underscore-min.js", "docs", "test", "*.yml", "*.map"]
+    "name": "modularjs-underscore",
+    "version": "0.0.0",
+    "main": "underscore.js",
+    "ignore": [
+        "underscore-min.js",
+        "docs",
+        "test",
+        "*.yml",
+        "*.map",
+        "**/.*",
+        "node_modules",
+        "bower_components",
+        "docs",
+        "test",
+        "Gruntfile.js",
+        "package.json"
+    ],
+    "dependencies": {
+        "modularjs-es5": "0.0.6"
+    }
 }

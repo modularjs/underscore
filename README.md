@@ -1,3 +1,9 @@
+Modularjs Underscore takes original Underscore.js library and breaks it into separate AMD Modules.
+
+Features that are not present in Modularjs Underscore:
+- chaining
+- mixin utility
+
                        __
                       /\ \                                                         __
      __  __    ___    \_\ \     __   _ __   ____    ___    ___   _ __    __       /\_\    ____
