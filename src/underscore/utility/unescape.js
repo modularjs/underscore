@@ -3,9 +3,7 @@ define(['underscore/utility/entityMap', 'underscore/objects/keys'], function (en
 
     var entityRegex = new RegExp('(' + keys(entityMap.unescape).join('|') + ')', 'g');
 
-    console.log(entityMap);
-
-    // Escape a string for HTML interpolation.
+    // Unescape a string from HTML interpolation.
     return function (string) {
         if (string == null) return '';
         return ('' + string).replace(entityRegex, function(match) {
