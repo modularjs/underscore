@@ -3,6 +3,7 @@ Modularjs Underscore takes original Underscore.js library and breaks it into sep
 Features that are not present in Modularjs Underscore:
 - chaining
 - mixin utility
+- template settings (only default EJB-style settings are applied)
 
                        __
                       /\ \                                                         __
