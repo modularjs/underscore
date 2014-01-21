@@ -1,22 +1,22 @@
 {
-    "name": "modularjs-underscore",
-    "version": "0.0.0",
-    "main": "underscore.js",
-    "ignore": [
-        "underscore-min.js",
-        "docs",
-        "test",
-        "*.yml",
-        "*.map",
-        "**/.*",
-        "node_modules",
-        "bower_components",
-        "docs",
-        "test",
-        "Gruntfile.js",
-        "package.json"
-    ],
-    "dependencies": {
-        "modularjs-es5": "0.0.6"
-    }
+  "name": "modularjs-underscore",
+  "version": "0.0.1",
+  "main": "underscore.js",
+  "ignore": [
+    "underscore-min.js",
+    "docs",
+    "test",
+    "*.yml",
+    "*.map",
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "docs",
+    "test",
+    "Gruntfile.js",
+    "package.json"
+  ],
+  "dependencies": {
+    "modularjs-es5": "0.0.6"
+  }
 }
