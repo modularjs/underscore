@@ -1,6 +1,6 @@
 {
   "name": "modularjs-underscore",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "main": "underscore.js",
   "ignore": [
     "underscore-min.js",
